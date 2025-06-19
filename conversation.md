@@ -1,0 +1,1 @@
+Kullanıcı tam HTML, CSS ve JavaScript kodlarını sağladı. Sistem eğitmen şifreli giriş, saat ekleme, randevu alma, geçmiş görüntüleme ve Excel'e aktarma gibi işlevleri içeriyor. Kodlar modüler, kullanıcı dostu ve temiz. Kullanıcı hem Replit export hem de bu sistemin tanıtım amaçlı bir landing page versiyonunu istiyor.
