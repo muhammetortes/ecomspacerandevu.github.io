@@ -1,527 +1,89 @@
-
 <!DOCTYPE html>
-<html lang="tr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EcomSpace - Amazon Eğitim ve Randevu Sistemi</title>
-  <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-</head>
-<body>
-  <header>
-    <div class="header-content">
-      <div class="logo-container">
-        <div class="logo-wrapper">
-          <img src="image1.jpg" alt="EcomSpace Logo" class="main-logo">
-          <div class="brand-info">
-            <span class="logo-text">EcomSpace</span>
-            <div class="slogan">Amazon'da Başarının Anahtarı</div>
-          </div>
-        </div>
-      </div>
-      <div class="header-right">
-        <button id="egitmenGirisTrigger" class="egitmen-giris-btn">
-          <i class="fas fa-user-shield"></i>
-          Eğitmen Girişi
-        </button>
-      </div>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/11.9.1/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/11.9.1/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="message">
+      <h2>Welcome</h2>
+      <h1>Firebase Hosting Setup Complete</h1>
+      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
+      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div>
-    <nav>
-      <ul>
-        <li><a href="#" id="tabRandevu" class="tab-btn active">Randevu Al</a></li>
-        <li><a href="#" id="tabIptal" class="tab-btn">Randevu İptal</a></li>
-      </ul>
-    </nav>
-  </header>
+    <p id="load">Firebase SDK Loading&hellip;</p>
 
-  <main class="container">
-    <div id="alert" class="alert hidden"></div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadEl = document.querySelector('#load');
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-    <!-- Randevu Alma Paneli -->
-    <section id="panelRandevuAl" class="panel active">
-      <div class="panel-header">
-        <h2><i class="fas fa-calendar-plus"></i> Randevu Al</h2>
-        <p class="panel-subtitle">Amazon eğitimi için kolayca randevu oluşturun</p>
-      </div>
-      <form id="randevuForm" class="modern-form">
-        <div class="grid">
-          <div class="input-group">
-            <i class="fas fa-user input-icon"></i>
-            <input type="text" id="randevuAd" placeholder="Adınız" required>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-user input-icon"></i>
-            <input type="text" id="randevuSoyad" placeholder="Soyadınız" required>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="input-group">
-            <i class="fas fa-chalkboard-teacher input-icon"></i>
-            <select id="randevuMentor" required>
-              <option value="">Mentör Seçin</option>
-              <option value="Muhammet Örteş">👨‍🏫 Muhammet Örteş</option>
-              <option value="Enes Çiğil">👨‍💼 Enes Çiğil</option>
-              <option value="Yunus Yavuz">👨‍💻 Yunus Yavuz</option>
-              <option value="Filiz Güldoğan">👩‍🏫 Filiz Güldoğan</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-phone input-icon"></i>
-            <input type="tel" id="randevuTelefon" placeholder="Telefon" required>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="input-group">
-            <i class="fas fa-calendar-alt input-icon"></i>
-            <input type="date" id="randevuTarih" required>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-clock input-icon"></i>
-            <select id="randevuSaat" required>
-              <option value="">Saat Seçin</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="input-group">
-            <i class="fas fa-clipboard-list input-icon"></i>
-            <select id="randevuNedeni" required>
-              <option value="">Randevu Nedeni</option>
-              <option value="Mağaza Kontrolü">🏪 Mağaza Kontrolü</option>
-              <option value="İlk Sipariş">📦 İlk Sipariş</option>
-              <option value="Diğer">📝 Diğer</option>
-            </select>
-          </div>
-        </div>
-        <div id="digerNedenContainer" class="hidden">
-          <div class="input-group">
-            <i class="fas fa-edit input-icon"></i>
-            <textarea id="digerNeden" placeholder="Lütfen randevu nedeninizi açıklayın" rows="3"></textarea>
-          </div>
-        </div>
-        <button type="submit" class="btn-primary">
-          <i class="fas fa-calendar-check"></i>
-          Randevu Al
-        </button>
-      </form>
-    </section>
-
-    <!-- Randevu İptal Paneli -->
-    <section id="panelRandevuIptal" class="panel">
-      <div class="panel-header">
-        <h2><i class="fas fa-calendar-times"></i> Randevu İptal</h2>
-        <p class="panel-subtitle">Mevcut randevunuzu telefon numaranızla bulun ve iptal edin</p>
-      </div>
-      <form id="iptalForm" class="modern-form">
-        <div class="input-group">
-          <i class="fas fa-phone input-icon"></i>
-          <input type="tel" id="iptalTelefon" placeholder="Telefon numaranızı girin" required>
-        </div>
-        <button type="submit" class="btn-primary">
-          <i class="fas fa-search"></i>
-          Randevuları Bul
-        </button>
-      </form>
-      
-      <div id="bulunanRandevular" class="randevu-listesi" style="margin-top: 2rem;"></div>
-    </section>
-
-    <!-- Eğitmen Paneli -->
-    <section id="panelEgitmen" class="panel">
-      <div class="panel-header">
-        <h2><i class="fas fa-user-tie"></i> Eğitmen Yönetim Paneli</h2>
-        <p class="panel-subtitle">Randevu ve saat yönetimi, raporlama ve sistem ayarları</p>
-        
-        <!-- Aktif Mentör Bilgisi -->
-        <div class="active-mentor-info">
-          <div class="mentor-badge">
-            <i class="fas fa-user-circle"></i>
-            <span id="activeMentorName">Mentör seçilmedi</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Hızlı Erişim Kartları -->
-      <div class="dashboard-cards">
-        <div class="dashboard-card" onclick="document.getElementById('btnGecmis').click()">
-          <div class="card-icon">
-            <i class="fas fa-history"></i>
-          </div>
-          <div class="card-content">
-            <h4>Geçmiş Randevular</h4>
-            <p>Tüm randevu geçmişini görüntüle</p>
-          </div>
-          <div class="card-arrow">
-            <i class="fas fa-chevron-right"></i>
-          </div>
-        </div>
-
-        <div class="dashboard-card" onclick="document.getElementById('btnDegerlendirmeler').click()">
-          <div class="card-icon">
-            <i class="fas fa-star"></i>
-          </div>
-          <div class="card-content">
-            <h4>Değerlendirmeler</h4>
-            <p>Müşteri geri bildirimlerini incele</p>
-          </div>
-          <div class="card-arrow">
-            <i class="fas fa-chevron-right"></i>
-          </div>
-        </div>
-
-        <div class="dashboard-card stats-card">
-          <div class="card-icon">
-            <i class="fas fa-chart-bar"></i>
-          </div>
-          <div class="card-content">
-            <h4>İstatistikler</h4>
-            <div class="stats-grid">
-              <div class="stat-item">
-                <span class="stat-label">Toplam Randevu:</span>
-                <span class="stat-value" id="toplamRandevuSayisi">0</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">Ortalama Puan:</span>
-                <span class="stat-value" id="dashboardOrtalamaPuan">0.0</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Saat Yönetimi Bölümü -->
-      <div class="admin-section">
-        <div class="section-header">
-          <h3><i class="fas fa-clock"></i> Saat Yönetimi</h3>
-          <p class="section-subtitle">Müsait saatleri ekle, düzenle ve kontrol et</p>
-        </div>
-
-        <!-- Mentör Seçimi -->
-        <div class="mentor-selection-card">
-          <h4><i class="fas fa-user-check"></i> Aktif Mentör</h4>
-          <p class="mentor-instruction">Giriş yaptığınız mentör otomatik olarak seçilmiştir</p>
-          <div class="input-group">
-            <i class="fas fa-chalkboard-teacher input-icon"></i>
-            <select id="adminMentorSelect" required>
-              <option value="">👨‍🏫 Mentör Seçin</option>
-              <option value="Muhammet Örteş">👨‍🏫 Muhammet Örteş</option>
-              <option value="Enes Çiğil">👨‍💼 Enes Çiğil</option>
-              <option value="Yunus Yavuz">👨‍💻 Yunus Yavuz</option>
-              <option value="Filiz Güldoğan">👩‍🏫 Filiz Güldoğan</option>
-            </select>
-          </div>
-        </div>
-        
-        <div class="saat-ekleme-card" id="saatEklemeCard" style="display: none;">
-          <h4><i class="fas fa-plus-circle"></i> Yeni Saat Ekle</h4>
-          <div class="grid">
-            <div class="input-group">
-              <i class="fas fa-calendar input-icon"></i>
-              <input type="date" id="saatTarih" required>
-            </div>
-            <div class="input-group">
-              <i class="fas fa-clock input-icon"></i>
-              <input type="time" id="saatSaat" required>
-            </div>
-          </div>
-          <button type="button" id="btnSaatEkle" class="btn-primary full-width">
-            <i class="fas fa-plus-circle"></i>
-            Saat Ekle
-          </button>
-        </div>
-
-        <div class="musait-saatler-card">
-          <div class="card-header">
-            <h4><i class="fas fa-list-ul"></i> Müsait Saatler</h4>
-            <div class="saat-filter">
-              <select id="saatFiltre" class="filter-select">
-                <option value="all">Tüm Saatler</option>
-                <option value="available">Müsait Olanlar</option>
-                <option value="booked">Rezerve Olanlar</option>
-              </select>
-            </div>
-          </div>
-          <div id="saatListesi" class="saat-grid"></div>
-        </div>
-      </div>
-
-      <!-- Rapor ve Dışa Aktarma Bölümü -->
-      <div class="admin-section">
-        <div class="section-header">
-          <h3><i class="fas fa-file-export"></i> Raporlar ve Dışa Aktarma</h3>
-          <p class="section-subtitle">Excel raporları oluştur ve verileri yönet</p>
-        </div>
-        
-        <div class="export-grid">
-          <div class="export-card">
-            <div class="export-icon">
-              <i class="fas fa-file-excel"></i>
-            </div>
-            <h4>Tüm Randevular</h4>
-            <p>Sistemdeki tüm randevuları Excel'e aktar</p>
-            <button id="btnExcel" class="btn-success">
-              <i class="fas fa-download"></i>
-              Excel İndir
-            </button>
-          </div>
-
-          <div class="export-card">
-            <div class="export-icon">
-              <i class="fas fa-user-check"></i>
-            </div>
-            <h4>Mentöre Özel Rapor</h4>
-            <div class="mentor-selection">
-              <select id="mentorExcelSelect" class="mentor-select">
-                <option value="">📊 Mentör Seçin</option>
-                <option value="Muhammet Örteş">👨‍🏫 Muhammet Örteş</option>
-                <option value="Enes Çiğil">👨‍💼 Enes Çiğil</option>
-                <option value="Yunus Yavuz">👨‍💻 Yunus Yavuz</option>
-                <option value="Filiz Güldoğan">👩‍🏫 Filiz Güldoğan</option>
-              </select>
-              <button id="btnMentorExcel" class="btn-success">
-                <i class="fas fa-download"></i>
-                İndir
-              </button>
-            </div>
-          </div>
-
-          <div class="export-card">
-            <div class="export-icon">
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>Değerlendirmeler</h4>
-            <p>Müşteri değerlendirmelerini Excel'e aktar</p>
-            <button id="btnDegerlendirmeExcel" class="btn-success">
-              <i class="fas fa-download"></i>
-              Excel İndir
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sistem Yönetimi Bölümü -->
-      <div class="admin-section">
-        <div class="section-header">
-          <h3><i class="fas fa-cogs"></i> Sistem Yönetimi</h3>
-          <p class="section-subtitle">Veri temizleme ve sistem ayarları</p>
-        </div>
-        
-        <div class="system-controls">
-          <div class="danger-zone">
-            <h4><i class="fas fa-exclamation-triangle"></i> Tehlikeli İşlemler</h4>
-            <p class="warning-text">Aşağıdaki işlemler geri alınamaz. Dikkatli olun!</p>
-            
-            <div class="danger-actions">
-              <button id="btnGecmisTemizle" class="btn-danger">
-                <i class="fas fa-trash-alt"></i>
-                Geçmiş Randevuları Temizle
-              </button>
-              <button id="btnDegerlendirmeTemizle" class="btn-danger">
-                <i class="fas fa-star-half-alt"></i>
-                Değerlendirmeleri Temizle
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Çıkış Bölümü -->
-      <div class="admin-section">
-        <div class="logout-section">
-          <button id="btnEgitmenCikis" class="btn-outline logout-btn">
-            <i class="fas fa-sign-out-alt"></i>
-            Eğitmen Panelinden Çıkış Yap
-          </button>
-        </div>
-      </div>
-
-      <!-- Gizli butonlar (script.js uyumluluğu için) -->
-      <div style="display: none;">
-        <button id="btnGecmis"></button>
-        <button id="btnDegerlendirmeler"></button>
-      </div>
-    </section>
-
-    <!-- Geçmiş Randevular Paneli -->
-    <section id="panelGecmis" class="panel">
-      <h2>Geçmiş Randevular</h2>
-      <button id="btnGecmiseGeri" class="btn-outline">
-        <i class="fas fa-arrow-left"></i>
-        Geri Dön
-      </button>
-      <div id="gecmisRandevuListesi" class="randevu-listesi"></div>
-    </section>
-
-    <!-- Değerlendirmeler Paneli -->
-    <section id="panelDegerlendirmeler" class="panel">
-      <h2>Müşteri Değerlendirmeleri</h2>
-      <button id="btnDegerlendirmelereGeri" class="btn-outline">
-        <i class="fas fa-arrow-left"></i>
-        Geri Dön
-      </button>
-      <div class="degerlendirme-ozet">
-        <div class="ozet-kartlar">
-          <div class="ozet-kart">
-            <h4>Toplam Değerlendirme</h4>
-            <div id="toplamDegerlendirme" class="ozet-sayi">0</div>
-          </div>
-          <div class="ozet-kart">
-            <h4>Ortalama Puan</h4>
-            <div id="ortalamaPuan" class="ozet-sayi">0.0</div>
-          </div>
-          <div class="ozet-kart">
-            <h4>5 Yıldız Oranı</h4>
-            <div id="besYildizOrani" class="ozet-sayi">0%</div>
-          </div>
-        </div>
-      </div>
-      <div id="degerlendirmeListesi" class="randevu-listesi"></div>
-    </section>
-  </main>
-
-  <!-- Eğitmen Giriş Modal -->
-  <div id="egitmenPanelOverlay" class="modal-overlay">
-    <div id="panelEgitmenGiris" class="modal">
-      <div class="modal-header">
-        <h3>Eğitmen Girişi</h3>
-        <button id="closeEgitmenPanel" class="close-btn">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="input-group full-width">
-          <i class="fas fa-chalkboard-teacher input-icon"></i>
-          <select id="loginMentorSelect" class="full-width" required>
-            <option value="">👨‍🏫 Giriş Türü Seçin</option>
-            <option value="ADMIN" style="background: rgba(255,215,0,0.2); color: #ffd700; font-weight: bold;">👑 ADMİN GİRİŞİ</option>
-            <option disabled>────── Eğitmen Girişi ──────</option>
-            <option value="Muhammet Örteş">👨‍🏫 Muhammet Örteş</option>
-            <option value="Enes Çiğil">👨‍💼 Enes Çiğil</option>
-            <option value="Yunus Yavuz">👨‍💻 Yunus Yavuz</option>
-            <option value="Filiz Güldoğan">👩‍🏫 Filiz Güldoğan</option>
-          </select>
-        </div>
-        
-        <div class="mentor-info" id="mentorPasswordInfo" style="display: none;">
-          <div class="info-card" id="mentorInfo">
-            <i class="fas fa-info-circle"></i>
-            <span>Her mentörün kendine özel şifresi vardır</span>
-          </div>
-          <div class="info-card admin-info" id="adminInfo" style="display: none; background: rgba(255, 215, 0, 0.15); border-color: rgba(255, 215, 0, 0.4); color: #ffd700;">
-            <i class="fas fa-crown"></i>
-            <span><strong>👑 ADMİN GİRİŞİ:</strong> Tüm sisteme erişim için özel admin şifresini girin</span>
-          </div>
-        </div>
-        
-        <div class="input-group full-width">
-          <i class="fas fa-lock input-icon"></i>
-          <input type="password" id="egitmenSifre" placeholder="Mentör şifrenizi girin" class="full-width">
-        </div>
-        <button id="btnEgitmenGiris" class="btn-primary full-width">
-          <i class="fas fa-sign-in-alt"></i>
-          Giriş Yap
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- KVKK ve Değerlendirme Footer -->
-  <footer class="kvkk-footer">
-    <div class="footer-content">
-      <div class="kvkk-section">
-        <p class="kvkk-text">
-          <i class="fas fa-shield-alt"></i>
-          <strong>KVKK Uyarısı:</strong> Bu platformda toplanan kişisel verileriniz, 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında işlenmektedir. Verileriniz sadece randevu oluşturma ve iletişim amaçları ile kullanılır. Haklarınız saklıdır.
-        </p>
-        <div class="kvkk-links">
-          <a href="#" onclick="showKVKKModal()" class="kvkk-link">📄 KVKK Aydınlatma Metni</a>
-          <a href="#" onclick="showContactModal()" class="kvkk-link">📞 İletişim</a>
-        </div>
-      </div>
-      
-      <div class="rating-section">
-        <h4><i class="fas fa-star"></i> Hizmetimizi Değerlendirin</h4>
-        <div class="rating-container">
-          <div class="stars">
-            <span class="star" data-rating="1">⭐</span>
-            <span class="star" data-rating="2">⭐</span>
-            <span class="star" data-rating="3">⭐</span>
-            <span class="star" data-rating="4">⭐</span>
-            <span class="star" data-rating="5">⭐</span>
-          </div>
-          <div class="rating-feedback" id="ratingFeedback"></div>
-        </div>
-        <textarea id="feedbackText" placeholder="Görüş ve önerilerinizi bizimle paylaşın..." rows="3" class="feedback-textarea"></textarea>
-        <button id="submitFeedback" class="btn-primary feedback-btn">
-          <i class="fas fa-paper-plane"></i>
-          Değerlendirme Gönder
-        </button>
-      </div>
-    </div>
-  </footer>
-
-  <!-- KVKK Aydınlatma Modal -->
-  <div id="kvkkModalOverlay" class="modal-overlay">
-    <div class="modal kvkk-modal">
-      <div class="modal-header">
-        <h3><i class="fas fa-shield-alt"></i> KVKK Aydınlatma Metni</h3>
-        <button id="closeKVKKModal" class="close-btn">&times;</button>
-      </div>
-      <div class="modal-body kvkk-content">
-        <h4>1. Veri Sorumlusu</h4>
-        <p><strong>EcomSpace Amazon Eğitim Platformu</strong></p>
-        
-        <h4>2. Kişisel Verilerin İşlenme Amacı</h4>
-        <ul>
-          <li>Randevu oluşturma ve yönetimi</li>
-          <li>İletişim kurulması</li>
-          <li>Hizmet kalitesinin artırılması</li>
-          <li>Yasal yükümlülüklerin yerine getirilmesi</li>
-        </ul>
-        
-        <h4>3. İşlenen Kişisel Veriler</h4>
-        <ul>
-          <li>Ad, Soyad</li>
-          <li>Telefon numarası</li>
-          <li>Randevu tercihleri</li>
-        </ul>
-        
-        <h4>4. Haklarınız</h4>
-        <ul>
-          <li>Kişisel verilerinizin işlenip işlenmediğini öğrenme</li>
-          <li>İşlenen verileriniz hakkında bilgi talep etme</li>
-          <li>Verilerin düzeltilmesini isteme</li>
-          <li>Verilerin silinmesini talep etme</li>
-          <li>İşleme itiraz etme</li>
-        </ul>
-        
-        <h4>5. İletişim</h4>
-        <p>Haklarınızı kullanmak için bizimle iletişime geçebilirsiniz.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- İletişim Modal -->
-  <div id="contactModalOverlay" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <h3><i class="fas fa-phone"></i> İletişim Bilgileri</h3>
-        <button id="closeContactModal" class="close-btn">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="contact-info">
-          <p><i class="fas fa-building"></i> <strong>EcomSpace Amazon Eğitim Platformu</strong></p>
-          <p><i class="fas fa-envelope"></i> info@ecomspace.com</p>
-          <p><i class="fas fa-phone"></i> +90 (XXX) XXX XX XX</p>
-          <p><i class="fas fa-map-marker-alt"></i> Adres bilgisi buraya eklenecek</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
+        try {
+          let app = firebase.app();
+          let features = [
+            'auth', 
+            'database', 
+            'firestore',
+            'functions',
+            'messaging', 
+            'storage', 
+            'analytics', 
+            'remoteConfig',
+            'performance',
+          ].filter(feature => typeof app[feature] === 'function');
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
+  </body>
 </html>

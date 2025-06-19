@@ -1,0 +1,366 @@
+// SAF, MODERN, TAM ÇALIŞAN: Randevu Sistemi JS
+const SIFRE = "17051995";
+const panels = {
+  randevuAl: document.getElementById("panelRandevuAl"),
+  egitmen: document.getElementById("panelEgitmen"),
+  gecmis: document.getElementById("panelGecmis")
+};
+const alertDiv = document.getElementById("alert");
+const egitmenPanel = document.getElementById("panelEgitmenGiris");
+const egitmenTrigger = document.getElementById("egitmenGirisTrigger");
+const egitmenOverlay = document.getElementById("egitmenPanelOverlay");
+const closeEgitmenBtn = document.getElementById("closeEgitmenPanel");
+const btnGecmisEgitmen = document.getElementById("btnGecmis");
+const btnGecmiseGeri = document.getElementById("btnGecmiseGeri");
+
+let egitmenGirisYapildi = false;
+egitmenTrigger.onclick = () => {
+  egitmenPanel.classList.add("active");
+  egitmenOverlay.classList.add("active");
+  document.body.style.overflow = "hidden";
+};
+egitmenOverlay.onclick = closeEgitmen;
+closeEgitmenBtn.onclick = closeEgitmen;
+function closeEgitmen() {
+  egitmenPanel.classList.remove("active");
+  egitmenOverlay.classList.remove("active");
+  document.body.style.overflow = "";
+  document.getElementById("formGiris").reset();
+}
+
+document.getElementById("btnRandevuAl").onclick = () => {
+  showPanel("randevuAl");
+  updateMusaitSaatler();
+};
+btnGecmisEgitmen.onclick = () => {
+  if (egitmenGirisYapildi) {
+    showPanel("gecmis");
+    updateGecmisListesi();
+  }
+};
+btnGecmiseGeri.onclick = () => {
+  showPanel("egitmen");
+};
+
+function showPanel(panel) {
+  for (let p in panels) panels[p].classList.add("hidden");
+  panels[panel].classList.remove("hidden");
+  if (panel === "randevuAl") updateMusaitSaatler();
+  if (panel === "egitmen") {
+    updateMentorRandevuListeleri();
+    updateSaatListesi();
+  }
+  if (panel === "gecmis") updateGecmisListesi();
+}
+
+document.getElementById("formGiris").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (document.getElementById("sifre").value === SIFRE) {
+    closeEgitmen();
+    showPanel("egitmen");
+    showAlert("Giriş başarılı.");
+    egitmenGirisYapildi = true;
+  } else {
+    showAlert("Hatalı şifre!", "error");
+    document.getElementById("sifre").value = "";
+  }
+});
+
+let saatler = JSON.parse(localStorage.getItem("saatler")) || [];
+let randevular = JSON.parse(localStorage.getItem("randevular")) || [];
+
+document.getElementById("btnSaatEkleTek").onclick = function() {
+  const mentor = document.getElementById("mentorSecEgitmen").value;
+  const tarih = document.getElementById("tarih").value;
+  const saat = document.getElementById("saatlerInput").value;
+  if (!mentor || !tarih || !saat) {
+    showAlert("Mentör, tarih ve saat seçmelisiniz.", "error");
+    return;
+  }
+  if (saatler.some(s => s.mentor === mentor && s.tarih === tarih && s.saat === saat)) {
+    showAlert("Bu saat zaten eklenmiş.", "error");
+    return;
+  }
+  saatler.push({ mentor, tarih, saat });
+  localStorage.setItem("saatler", JSON.stringify(saatler));
+  showAlert("Saat eklendi.");
+  document.getElementById("saatlerInput").value = "";
+  updateSaatListesi();
+  updateMentorRandevuListeleri();
+  updateMusaitSaatler();
+};
+
+function updateSaatListesi() {
+  const div = document.getElementById("saatListesi");
+  if (saatler.length === 0) {
+    div.innerHTML = "<i>Henüz saat eklenmedi.</i>";
+    return;
+  }
+  const bosSaatler = saatler.filter(s => !randevular.some(r => r.mentor === s.mentor && r.tarih === s.tarih && r.saat === s.saat));
+  if (bosSaatler.length === 0) {
+    div.innerHTML = "<i>Boş saat yok.</i>";
+    return;
+  }
+  let html = `
+    <table class="saat-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Mentör</th>
+          <th>Tarih</th>
+          <th>Saat</th>
+          <th>Sil</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${bosSaatler.map((s, i) => `
+        <tr>
+          <td>${i+1}</td>
+          <td>${s.mentor}</td>
+          <td>${s.tarih}</td>
+          <td>${s.saat}</td>
+          <td>
+            <button class="delete-btn" title="Sil" onclick="deleteSaat('${s.mentor}','${s.tarih}','${s.saat}')">
+              <span class="material-icons">delete</span>
+            </button>
+          </td>
+        </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+  div.innerHTML = html;
+}
+
+window.deleteSaat = function(mentor, tarih, saat) {
+  if (confirm("Bu saati silmek istediğinize emin misiniz?")) {
+    saatler = saatler.filter(s => !(s.mentor === mentor && s.tarih === tarih && s.saat === saat));
+    localStorage.setItem("saatler", JSON.stringify(saatler));
+    updateSaatListesi();
+    updateMusaitSaatler();
+    showAlert("Saat silindi.");
+    updateMentorRandevuListeleri();
+  }
+};
+updateSaatListesi();
+
+const nedenSelect = document.getElementById("neden");
+const nedenDiger = document.getElementById("nedenDiger");
+nedenSelect.addEventListener("change", function() {
+  if (this.value === "Diğer") {
+    nedenDiger.style.display = "block";
+    nedenDiger.required = true;
+  } else {
+    nedenDiger.style.display = "none";
+    nedenDiger.value = "";
+    nedenDiger.required = false;
+  }
+});
+
+document.getElementById("formRandevu").addEventListener("submit", (e) => {
+  e.preventDefault();
+  let ad = document.getElementById("ad").value.trim();
+  let egitimGrubu = document.getElementById("egitimGrubu").value.trim();
+  let telefon = document.getElementById("telefon").value.trim();
+  let mentor = document.getElementById("mentorSec").value;
+  let saatValue = document.getElementById("musaitSaatler").value;
+  let neden = nedenSelect.value;
+  let nedenDetay = neden === "Diğer" ? nedenDiger.value.trim() : "";
+  if (!ad || !egitimGrubu || !telefon || !mentor || !saatValue || !neden || (neden === "Diğer" && !nedenDetay)) {
+    showAlert("Lütfen tüm alanları doldurun.", "error");
+    return;
+  }
+  let [tarih, saat] = saatValue.split("|");
+  let nedenKayit = (neden === "Diğer") ? `Diğer: ${nedenDetay}` : neden;
+  if (randevular.some(r => r.mentor === mentor && r.tarih === tarih && r.saat === saat)) {
+    showAlert("Bu saatte zaten randevu var!", "error");
+    return;
+  }
+  randevular.push({
+    ad, egitimGrubu, telefon, mentor, tarih, saat,
+    neden: nedenKayit,
+    kayitTarihi: (new Date()).toISOString()
+  });
+  localStorage.setItem("randevular", JSON.stringify(randevular));
+  showAlert(`Randevunuz başarıyla alındı!`);
+  e.target.reset();
+  nedenDiger.style.display = "none";
+  updateMentorRandevuListeleri();
+  updateMusaitSaatler();
+  updateSaatListesi();
+});
+
+document.getElementById("mentorSec").addEventListener("change", updateMusaitSaatler);
+
+function updateMusaitSaatler() {
+  let mentor = document.getElementById("mentorSec").value;
+  let select = document.getElementById("musaitSaatler");
+  select.innerHTML = '<option value="">Müsait Saat Seç</option>';
+  if (!mentor) return;
+  let musaitler = saatler
+    .filter(s => s.mentor === mentor && !randevular.find(r => r.mentor === mentor && r.tarih === s.tarih && r.saat === s.saat));
+  musaitler.forEach(s => {
+    let opt = document.createElement("option");
+    opt.value = `${s.tarih}|${s.saat}`;
+    opt.textContent = `${s.tarih} ${s.saat}`;
+    select.appendChild(opt);
+  });
+}
+
+document.getElementById("btnCikis").onclick = () => {
+  showPanel("randevuAl");
+  updateMusaitSaatler();
+  showAlert("Çıkış yapıldı.");
+  egitmenGirisYapildi = false;
+};
+
+function updateMentorRandevuListeleri() {
+  if (!egitmenGirisYapildi) return;
+  const mentors = [
+    "Muhammet Örteş",
+    "Enes Çiğil",
+    "Yunus Yavuz",
+    "Filiz Güldoğan"
+  ];
+  const container = document.getElementById("mentorRandevuListeleri");
+  let html = "";
+  mentors.forEach(mentor => {
+    const mentorRandevular = randevular
+      .filter(r => r.mentor === mentor)
+      .sort((a, b) => (a.tarih + a.saat).localeCompare(b.tarih + b.saat));
+    html += `<div class="mentor-block">
+      <h4>${mentor}</h4>
+      ${
+        mentorRandevular.length === 0
+          ? "<i>Henüz randevu yok</i>"
+          : `<ul>` +
+            mentorRandevular
+              .map(
+                r =>
+                  `<li><b>${r.ad}</b> / <b>Grup:</b> ${r.egitimGrubu} <br> (${r.telefon})<br><small>${r.tarih} ${r.saat} - <em>${r.neden}</em></small></li>`
+              )
+              .join("") +
+            `</ul>`
+      }
+      <button type="button" class="nice-btn" style="font-size:0.97em;" onclick="exportMentorExcel('${mentor}')">
+        <span class="material-icons" style="font-size:1em;">download</span> Excel
+      </button>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+updateMentorRandevuListeleri();
+
+window.exportMentorExcel = function(mentor) {
+  const mentorRandevular = randevular.filter(r => r.mentor === mentor);
+  if (mentorRandevular.length === 0) {
+    showAlert("Bu mentöre ait randevu yok.", "error");
+    return;
+  }
+  const headers = [
+    ["Mentör","Ad Soyad","Eğitim Grubu","Telefon","Tarih","Saat","Neden","Kayıt Tarihi"]
+  ];
+  const data = mentorRandevular.map(r => [
+    r.mentor,
+    r.ad,
+    r.egitimGrubu,
+    r.telefon,
+    r.tarih,
+    r.saat,
+    r.neden,
+    r.kayitTarihi ? r.kayitTarihi.substring(0,19).replace("T"," ") : ""
+  ]);
+  const ws = XLSX.utils.aoa_to_sheet(headers.concat(data));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, mentor.replace(/ /g,"_"));
+  XLSX.writeFile(wb, `randevular_${mentor.replace(/ /g,"_")}.xlsx`);
+};
+
+document.getElementById("btnExcelAll").onclick = function() {
+  if (randevular.length === 0) {
+    showAlert("Aktarılacak randevu bulunamadı.", "error");
+    return;
+  }
+  const mentors = [
+    "Muhammet Örteş",
+    "Enes Çiğil",
+    "Yunus Yavuz",
+    "Filiz Güldoğan"
+  ];
+  const wb = XLSX.utils.book_new();
+  mentors.forEach(mentor => {
+    const mentorRandevular = randevular.filter(r => r.mentor === mentor);
+    if (mentorRandevular.length === 0) return;
+    const headers = [
+      ["Mentör","Ad Soyad","Eğitim Grubu","Telefon","Tarih","Saat","Neden","Kayıt Tarihi"]
+    ];
+    const data = mentorRandevular.map(r => [
+      r.mentor,
+      r.ad,
+      r.egitimGrubu,
+      r.telefon,
+      r.tarih,
+      r.saat,
+      r.neden,
+      r.kayitTarihi ? r.kayitTarihi.substring(0,19).replace("T"," ") : ""
+    ]);
+    const ws = XLSX.utils.aoa_to_sheet(headers.concat(data));
+    XLSX.utils.book_append_sheet(wb, ws, mentor.replace(/ /g,"_"));
+  });
+  XLSX.writeFile(wb, "ecomspace_tum_randevular.xlsx");
+};
+
+function updateGecmisListesi() {
+  if (!egitmenGirisYapildi) {
+    document.getElementById("gecmisListesi").innerHTML = "<i>Bu bölüme sadece eğitmenler erişebilir.</i>";
+    return;
+  }
+  let gecmisDiv = document.getElementById("gecmisListesi");
+  if (randevular.length === 0) {
+    gecmisDiv.innerHTML = "<i>Hiç randevu alınmamış.</i>";
+    return;
+  }
+  let html = `<table class="saat-table">
+    <thead>
+      <tr>
+        <th>Mentör</th><th>Ad Soyad</th><th>Grup</th><th>Telefon</th><th>Tarih</th><th>Saat</th><th>Neden</th><th>Kayıt Tarihi</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${randevular.map(r => 
+        `<tr>
+          <td>${r.mentor}</td>
+          <td>${r.ad}</td>
+          <td>${r.egitimGrubu}</td>
+          <td>${r.telefon}</td>
+          <td>${r.tarih}</td>
+          <td>${r.saat}</td>
+          <td>${r.neden}</td>
+          <td>${r.kayitTarihi ? r.kayitTarihi.substring(0,19).replace("T"," ") : ""}</td>
+        </tr>`).join("")}
+    </tbody>
+  </table>`;
+  gecmisDiv.innerHTML = html;
+}
+
+document.getElementById("btnTumunuSil").onclick = function() {
+  if (confirm("Tüm saatler ve randevular silinecek. Emin misiniz?")) {
+    localStorage.removeItem("saatler");
+    localStorage.removeItem("randevular");
+    saatler = [];
+    randevular = [];
+    updateSaatListesi();
+    updateMentorRandevuListeleri();
+    updateMusaitSaatler();
+    showAlert("Tüm veriler silindi.");
+  }
+};
+
+function showAlert(msg, type) {
+  alertDiv.textContent = msg;
+  alertDiv.classList.remove("hidden", "error");
+  if (type === "error") alertDiv.classList.add("error");
+  setTimeout(() => {
+    alertDiv.classList.add("hidden");
+  }, 2500);
+}

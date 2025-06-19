@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ECOMSPACE - Eğitim ve Randevu Sistemi</title>
+  <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <span class="logo-svg">
+        <img src="image1.jpg" alt="Logo">
+      </span>
+      <span class="logo-text">Ecom Space</span>
+    </div>
+    <p>Amazon Eğitim Şirketi Randevu Sistemi</p>
+    <nav>
+      <ul>
+        <li><a href="#" id="btnRandevuAl"><span class="material-icons">event_available</span> Randevu Al</a></li>
+      </ul>
+      <div class="egitmen-giris-ikon">
+        <button id="egitmenGirisTrigger" class="egitmen-giris-btn" title="Eğitmen Girişi">
+          <span class="material-icons">lock</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+  <aside id="panelEgitmenGiris" class="egitmen-giris-panel">
+    <div class="egitmen-giris-icerik">
+      <button id="closeEgitmenPanel" class="egitmen-close-btn" title="Kapat"><span class="material-icons">close</span></button>
+      <h2><span class="material-icons" style="font-size:1.15em;vertical-align:-2px;">lock</span> Eğitmen Girişi</h2>
+      <form id="formGiris" autocomplete="off">
+        <input type="password" id="sifre" placeholder="Şifre" required autocomplete="off">
+        <button type="submit" class="big-primary-btn"><span class="material-icons">login</span> Giriş Yap</button>
+      </form>
+    </div>
+  </aside>
+  <div id="egitmenPanelOverlay" class="egitmen-panel-overlay"></div>
+  <main class="container">
+    <div id="alert" class="hidden"></div>
+    <section id="panelRandevuAl">
+      <h2>Randevu Al <span class="material-icons" style="font-size:1.3em;vertical-align:-2px;color:#4ec0c7;">event</span></h2>
+      <form id="formRandevu" autocomplete="off">
+        <input type="text" id="ad" placeholder="Adınız ve Soyadınız" required autocomplete="off">
+        <input type="text" id="egitimGrubu" placeholder="Eğitim Grubunuz (örn: Güz 2025, Akşam Grubu)" required autocomplete="off">
+        <input type="tel" id="telefon" placeholder="Telefon Numaranız" required autocomplete="off" pattern="[0-9]{10,15}">
+        <select id="mentorSec" required>
+          <option value="">Mentör Seç</option>
+          <option value="Muhammet Örteş">Muhammet Örteş</option>
+          <option value="Enes Çiğil">Enes Çiğil</option>
+          <option value="Yunus Yavuz">Yunus Yavuz</option>
+          <option value="Filiz Güldoğan">Filiz Güldoğan</option>
+        </select>
+        <select id="musaitSaatler" required>
+          <option value="">Müsait Saat Seç</option>
+        </select>
+        <select id="neden" required>
+          <option value="">Randevu Nedeni Seçin</option>
+          <option value="Mağaza Kontrolü">Mağaza Kontrolü</option>
+          <option value="İlk Sipariş">İlk Sipariş</option>
+          <option value="Diğer">Diğer</option>
+        </select>
+        <textarea id="nedenDiger" placeholder="Diğer nedeninizi yazınız..." rows="2" style="display:none;" maxlength="120"></textarea>
+        <button type="submit" class="big-primary-btn"><span class="material-icons">check_circle</span> Randevuyu Kaydet</button>
+      </form>
+    </section>
+    <section id="panelEgitmen" class="hidden">
+      <h2>Eğitmen Paneli <span class="material-icons" style="font-size:1em;vertical-align:-2px;">admin_panel_settings</span></h2>
+      <div class="egitmen-main-layout">
+        <div class="egitmen-left">
+          <div class="egitmen-actions">
+            <button type="button" id="btnExcelAll" class="nice-btn"><span class="material-icons">download</span> Tümünü Excel'e Aktar</button>
+            <button type="button" id="btnTumunuSil" class="nice-btn danger-btn"><span class="material-icons">delete</span> Tüm Verileri Temizle</button>
+            <button type="button" id="btnGecmis" class="nice-btn"><span class="material-icons">history</span> Randevu Geçmişi</button>
+          </div>
+          <form id="formSaatEkle" class="saat-form" autocomplete="off">
+            <label for="mentorSecEgitmen">Mentör</label>
+            <select id="mentorSecEgitmen" required>
+              <option value="">Mentör Seç</option>
+              <option value="Muhammet Örteş">Muhammet Örteş</option>
+              <option value="Enes Çiğil">Enes Çiğil</option>
+              <option value="Yunus Yavuz">Yunus Yavuz</option>
+              <option value="Filiz Güldoğan">Filiz Güldoğan</option>
+            </select>
+            <label for="tarih">Tarih</label>
+            <input type="date" id="tarih" required>
+            <label for="saatlerInput">Saat</label>
+            <input type="time" id="saatlerInput" min="08:00" max="22:00" step="1800">
+            <button type="button" class="nice-btn success-btn" id="btnSaatEkleTek" style="width:100%"><span class="material-icons">add_circle</span> Ekle</button>
+          </form>
+          <div id="saatListesi"></div>
+          <button id="btnCikis" class="nice-btn"><span class="material-icons">logout</span> Çıkış Yap</button>
+        </div>
+        <div class="egitmen-right" id="mentorRandevuListeleri"></div>
+      </div>
+    </section>
+    <section id="panelGecmis" class="hidden">
+      <h2>Randevu Geçmişi <span class="material-icons" style="font-size:1em;vertical-align:-2px;">history</span></h2>
+      <div id="gecmisListesi"></div>
+      <button type="button" class="nice-btn" id="btnGecmiseGeri"><span class="material-icons">arrow_back</span> Panele Dön</button>
+    </section>
+  </main>
+  <footer>
+    <p>ECOMSPACE, 6698 sayılı KVKK kapsamında kişisel verilerinizi güvenli şekilde saklar ve paylaşmaz.</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
